@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESEARCH SYNC - Nursing Research Workshop Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <div id="app" class="min-h-screen flex flex-col">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: LOGIN & ROLE VERIFICATION SCREEN -->
+        <!-- ========================================== -->
+        <section id="login-view" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-slate-800 to-brand-900">
+            <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-slate-200 transition-all">
+                <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-100 text-brand-600 mb-4 shadow-inner">
+                        <i class="fa-solid fa-graduation-cap text-3xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold tracking-tight text-slate-900">RESEARCH SYNC</h1>
+                    <p class="text-xs uppercase tracking-widest text-brand-600 font-semibold mt-1">Nursing Research Workshop Hub</p>
+                    <p class="text-sm text-slate-500 mt-2">Trinity University of Asia - College of Nursing</p>
+                </div>
+
+                <!-- Step 1: Role Selection -->
+                <div id="role-selection-step" class="space-y-4">
+                    <label class="block text-sm font-medium text-slate-700 text-center mb-2">How will you log in?</label>
+                    <button onclick="selectRole('PROFESSOR')" class="w-full group p-4 border-2 border-slate-200 hover:border-brand-500 rounded-xl flex items-center justify-between transition-all hover:shadow-md bg-white">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-user-tie text-lg"></i>
+                            </div>
+                            <span class="font-semibold text-slate-800 group-hover:text-brand-700">PROFESSOR</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-brand-500"></i>
+                    </button>
+
+                    <button onclick="selectRole('STUDENT')" class="w-full group p-4 border-2 border-slate-200 hover:border-brand-500 rounded-xl flex items-center justify-between transition-all hover:shadow-md bg-white">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-user-graduate text-lg"></i>
+                            </div>
+                            <span class="font-semibold text-slate-800 group-hover:text-brand-700">STUDENT</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-brand-500"></i>
+                    </button>
+
+                    <!-- Quick Testing Bar -->
+                    <div class="mt-8 pt-6 border-t border-slate-200">
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 text-center">Quick Demo Testing Presets</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <button onclick="quickLogin('student')" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-center transition">
+                                Student Demo
+                            </button>
+                            <button onclick="quickLogin('professor')" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-center transition">
+                                Professor Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Login Form -->
+                <div id="login-form-step" class="hidden space-y-4">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-100 mb-4">
+                        <span id="selected-role-badge" class="px-3 py-1 bg-brand-100 text-brand-800 text-xs font-bold rounded-full uppercase tracking-wider">
+                            STUDENT LOGIN
+                        </span>
+                        <button onclick="resetRoleSelection()" class="text-xs text-slate-400 hover:text-slate-600 underline">
+                            Change Role
+                        </button>
+                    </div>
+
+                    <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">School Email</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <i class="fa-regular fa-envelope"></i>
+                                </span>
+                                <input type="email" id="email-input" required placeholder="username@tua.edu.ph" class="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition">
+                            </div>
+                            <p id="domain-error" class="hidden mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-circle-exclamation"></i> Please use your official school email address (@tua.edu.ph).
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <i class="fa-solid fa-lock"></i>
+                                </span>
+                                <input type="password" id="password-input" required value="••••••••" class="w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-md shadow-brand-500/20 transition hover:shadow-lg">
+                            LOG IN <i class="fa-solid fa-arrow-right-to-bracket ml-1"></i>
+                        </button>
+
+                        <div class="text-center pt-2">
+                            <a href="#" onclick="alert('Password reset instructions have been sent to your academic email administrator.'); return false;" class="text-xs text-slate-500 hover:text-brand-600 transition">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN DASHBOARD APPS (Hidden when not logged in) -->
+        <div id="main-app" class="hidden flex-1 flex flex-col bg-slate-50">
+
+            <!-- NAVBAR / HEADER -->
+            <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between h-16 gap-4">
+                        
+                        <!-- Logo & Brand -->
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold shadow-md shadow-brand-600/20">
+                                <i class="fa-solid fa-microscope text-lg"></i>
+                            </div>
+                            <div>
+                                <h1 class="font-extrabold text-slate-900 tracking-tight text-lg leading-tight">RESEARCH SYNC</h1>
+                                <p id="user-subhead" class="text-xs text-brand-600 font-semibold">Welcome, Group 4!</p>
+                            </div>
+                        </div>
+
+                        <!-- Global Search Bar -->
+                        <div class="flex-1 max-w-lg relative">
+                            <div class="relative">
+                                <input type="text" id="global-search" oninput="handleSearch(this.value)" placeholder="Search workshops, PPTs, videos, templates, activities, Q&A..." class="w-full pl-10 pr-10 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white border border-transparent focus:border-brand-500 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-sm"></i>
+                                <button onclick="clearSearch()" id="search-clear-btn" class="hidden absolute right-3 top-2.5 text-slate-400 hover:text-slate-600">
+                                    <i class="fa-solid fa-xmark text-sm"></i>
+                                </button>
+                            </div>
+
+                            <!-- Search Results Dropdown -->
+                            <div id="search-results-modal" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 z-50 max-h-96 overflow-y-auto custom-scrollbar">
+                                <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Search Results</span>
+                                    <span id="result-count" class="text-xs font-semibold px-2 py-0.5 bg-brand-100 text-brand-800 rounded-full">0 matches</span>
+                                </div>
+                                <div id="search-results-list" class="space-y-2">
+                                    <!-- Dynamic content inserted by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Profile & Mode Switcher -->
+                        <div class="flex items-center gap-3">
+                            <button onclick="openNotificationModal()" class="relative p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition">
+                                <i class="fa-regular fa-bell text-lg"></i>
+                                <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white"></span>
+                            </button>
+
+                            <div class="h-8 w-px bg-slate-200"></div>
+
+                            <div class="flex items-center gap-2">
+                                <div id="user-avatar" class="w-9 h-9 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm shadow">
+                                    G4
+                                </div>
+                                <div class="hidden md:block text-left">
+                                    <div id="user-display-name" class="text-sm font-semibold text-slate-800 leading-tight">Group 4</div>
+                                    <div id="user-display-role" class="text-xs text-slate-400 font-medium">BSN Student</div>
+                                </div>
+                            </div>
+
+                            <button onclick="logout()" class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition" title="Log Out">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <div class="bg-white border-t border-slate-100">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 overflow-x-auto custom-scrollbar py-1">
+                        <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-brand-600 bg-brand-50">
+                            <i class="fa-solid fa-chart-pie"></i> Dashboard
+                        </button>
+                        <button onclick="switchTab('directory')" id="tab-directory" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-solid fa-folder-open"></i> Workshop Directory
+                        </button>
+                        <button onclick="switchTab('tracker')" id="tab-tracker" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-solid fa-list-check"></i> Workshop Tracker
+                        </button>
+                        <button onclick="switchTab('helpdesk')" id="tab-helpdesk" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
+                            <i class="fa-circle-question fa-regular"></i> Help Desk / Q&A
+                        </button>
+                        <button onclick="switchTab('professor-view')" id="tab-professor-view" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-indigo-600 hover:bg-indigo-50 border border-indigo-200 ml-auto">
+                            <i class="fa-solid fa-user-gear"></i> Professor Dashboard
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- MAIN CONTENT AREA -->
+            <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+                <!-- ========================================== -->
+                <!-- VIEW 2: STUDENT DASHBOARD VIEW -->
+                <!-- ========================================== -->
+                <div id="view-dashboard" class="space-y-6">
+
+                    <!-- Top Banner with Panda Progress Mascot -->
+                    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="space-y-2 max-w-xl z-10">
+                            <span class="px-3 py-1 bg-brand-500/20 text-brand-300 text-xs font-bold rounded-full uppercase tracking-wider border border-brand-500/30">
+                                NRES 2 Academic Year 2026-2027
+                            </span>
+                            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Nursing Research Workshop Hub</h2>
+                            <p class="text-slate-300 text-sm">
+                                Track your research manuscript progress, access lecture guidelines, and submit requirements synchronously with your group.
+                            </p>
+                        </div>
+
+                        <!-- Panda Progress System Widget -->
+                        <div class="z-10 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 w-full md:w-auto min-w-[280px]">
+                            <div id="panda-avatar" class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-inner relative">
+                                🐼
+                                <span id="panda-badge" class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-slate-900"></span>
+                            </div>
+                            <div>
+                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">Panda Tracker Status</div>
+                                <div id="panda-status-title" class="font-bold text-white text-base">Awake & Ready</div>
+                                <div id="panda-status-desc" class="text-xs text-slate-300 mt-0.5">"There's still work to do."</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Core Grid Layout -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                        <!-- Left Column: Primary Cards (2 cols on lg) -->
+                        <div class="lg:col-span-2 space-y-6">
+
+                            <!-- Current Workshop & Pending Submissions Cards -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                
+                                <!-- Current Workshop Card -->
+                                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Current Workshop</span>
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">OPEN</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-900 mb-1">Workshop 3: Data Collection</h3>
+                                    <p class="text-xs text-slate-500 mb-4">Focus on instruments, sampling techniques, and data gathering procedure.</p>
+                                    
+                                    <div class="space-y-1.5 mb-4">
+                                        <div class="flex justify-between text-xs font-semibold text-slate-600">
+                                            <span>Activities Completed</span>
+                                            <span class="text-brand-600">2 / 3 Completed</span>
+                                        </div>
+                                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                            <div class="bg-brand-500 h-2.5 rounded-full w-2/3 transition-all duration-500"></div>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="navigateToWorkshop(3)" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                                        <span>View Workshop</span> <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Pending Submissions Card -->
+                                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Submission</span>
+                                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">Due Tomorrow</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-slate-900 mb-1">Activity 3: Research Objectives</h3>
+                                    <p class="text-xs text-slate-500 mb-4">Formulate general and specific nursing research objectives.</p>
+
+                                    <div class="p-2.5 bg-amber-50 rounded-xl border border-amber-200/60 flex items-center gap-3 mb-4">
+                                        <i class="fa-solid fa-clock text-amber-600 text-lg"></i>
+                                        <div class="text-xs text-amber-900">
+                                            <span class="font-bold">Deadline:</span> Sept 30, 2026 - 11:59 PM
+                                        </div>
+                                    </div>
+
+                                    <button onclick="switchTab('tracker')" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                                        <span>View Tracker</span> <i class="fa-solid fa-list-check"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <!-- Google Calendar Card -->
+                            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-100">
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                                            <i class="fa-solid fa-calendar-days text-brand-600"></i> September 2026 Schedule
+                                        </h3>
+                                        <p class="text-xs text-slate-500">Workshop releases, activity deadlines, and defense milestones</p>
+                                    </div>
+                                    <button onclick="addToGoogleCalendar()" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                                        <i class="fa-brands fa-google"></i> + Add to Google Calendar
+                                    </button>
+                                </div>
+
+                                <!-- Calendar Grid Display -->
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-xs text-center border-collapse">
+                                        <thead>
+                                            <tr class="text-slate-400 font-bold border-b border-slate-100">
+                                                <th class="py-2">MON</th>
+                                                <th class="py-2">TUE</th>
+                                                <th class="py-2">WED</th>
+                                                <th class="py-2">THU</th>
+                                                <th class="py-2">FRI</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                                            <tr>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold text-slate-400">7</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold">W1 Opens</span>
+                                                </td>
+                                                <td class="py-3 px-1"><div class="font-semibold">8</div></td>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">9</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px]">Act 1 Due</span>
+                                                </td>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">10</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px]">Act 2 Due</span>
+                                                </td>
+                                                <td class="py-3 px-1"><div class="font-semibold">11</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 px-1"><div class="font-semibold">14</div></td>
+                                                <td class="py-3 px-1"><div class="font-semibold">15</div></td>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">16</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold">W2 Opens</span>
+                                                </td>
+                                                <td class="py-3 px-1"><div class="font-semibold">17</div></td>
+                                                <td class="py-3 px-1"><div class="font-semibold">18</div></td>
+                                            </tr>
+                                            <tr class="bg-amber-50/40">
+                                                <td class="py-3 px-1"><div class="font-semibold">21</div></td>
+                                                <td class="py-3 px-1"><div class="font-semibold">22</div></td>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">23</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold">W3 Opens</span>
+                                                </td>
+                                                <td class="py-3 px-1"><div class="font-semibold">24</div></td>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">25</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px] font-bold">Feedback Due</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="bg-brand-50/30">
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">28</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded text-[10px]">W4 Opens</span>
+                                                </td>
+                                                <td class="py-3 px-1 bg-brand-100/50 rounded-lg">
+                                                    <div class="font-bold text-brand-900">29</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-brand-600 text-white rounded text-[10px] font-bold">Today</span>
+                                                </td>
+                                                <td class="py-3 px-1">
+                                                    <div class="font-semibold">30</div>
+                                                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-rose-100 text-rose-700 rounded text-[10px] font-bold">Act 3 Deadline</span>
+                                                </td>
+                                                <td class="py-3 px-1"><div class="font-semibold text-slate-400">1</div></td>
+                                                <td class="py-3 px-1"><div class="font-semibold text-slate-400">2</div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Sidebar (Announcements & Quick Links) -->
+                        <div class="space-y-6">
+
+                            <!-- Announcements Card -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                                    <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                        <i class="fa-solid fa-bullhorn text-rose-500"></i> Announcements
+                                    </h3>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">Updated Today</span>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <!-- Item 1 -->
+                                    <div class="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition border border-slate-100">
+                                        <div class="flex items-center gap-2 text-rose-600 text-xs font-bold mb-1">
+                                            <span class="w-2 h-2 rounded-full bg-rose-500"></span> Workshop 4 is now open
+                                        </div>
+                                        <p class="text-xs text-slate-500 mb-2">September 28, 2026</p>
+                                        <button onclick="openAnnouncementModal('Workshop 4 is now open', 'Workshop 4: Data Analysis modules and templates are now unlocked. Please check your dashboard directory for details.')" class="text-xs text-brand-600 hover:text-brand-700 font-bold underline">
+                                            [Read More]
+                                        </button>
+                                    </div>
+
+                                    <!-- Item 2 -->
+                                    <div class="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition border border-slate-100">
+                                        <div class="flex items-center gap-2 text-amber-600 text-xs font-bold mb-1">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Activity 3 deadline moved
+                                        </div>
+                                        <p class="text-xs text-slate-500 mb-2">September 27, 2026</p>
+                                        <button onclick="openAnnouncementModal('Activity 3 Deadline Extension', 'The deadline for Activity 3 (Research Objectives) has been extended to September 30, 2026 at 11:59 PM to accommodate ethics review revisions.')" class="text-xs text-brand-600 hover:text-brand-700 font-bold underline">
+                                            [Read More]
+                                        </button>
+                                    </div>
+
+                                    <!-- Item 3 -->
+                                    <div class="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition border border-slate-100">
+                                        <div class="flex items-center gap-2 text-blue-600 text-xs font-bold mb-1">
+                                            <span class="w-2 h-2 rounded-full bg-blue-500"></span> System maintenance
+                                        </div>
+                                        <p class="text-xs text-slate-500 mb-2">September 30, 10:00 PM</p>
+                                        <button onclick="openAnnouncementModal('System Maintenance Notice', 'Research Sync portal will undergo routine scheduled maintenance on September 30 from 10:00 PM to 11:00 PM PST. Please submit requirements before this window.')" class="text-xs text-brand-600 hover:text-brand-700 font-bold underline">
+                                            [Read More]
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Links Card -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                <h3 class="font-bold text-slate-900 text-sm mb-3">Quick Navigation</h3>
+                                <div class="grid grid-cols-1 gap-2 text-xs">
+                                    <button onclick="switchTab('directory')" class="p-3 rounded-xl bg-slate-50 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 text-left transition flex items-center justify-between border border-slate-100">
+                                        <span class="flex items-center gap-2"><i class="fa-solid fa-folder text-brand-600"></i> Workshop Directory</span>
+                                        <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                                    </button>
+                                    <button onclick="switchTab('tracker')" class="p-3 rounded-xl bg-slate-50 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 text-left transition flex items-center justify-between border border-slate-100">
+                                        <span class="flex items-center gap-2"><i class="fa-solid fa-bars-progress text-brand-600"></i> Group Workshop Tracker</span>
+                                        <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                                    </button>
+                                    <button onclick="switchTab('helpdesk')" class="p-3 rounded-xl bg-slate-50 hover:bg-brand-50 hover:text-brand-700 font-semibold text-slate-700 text-left transition flex items-center justify-between border border-slate-100">
+                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-brand-600"></i> Q&A / Help Desk</span>
+                                        <i class="fa-solid fa-chevron-right text-slate-300"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- VIEW 3: WORKSHOP DIRECTORY VIEW -->
+                <!-- ========================================== -->
+                <div id="view-directory" class="hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">WORKSHOP DIRECTORY</h2>
+                            <p class="text-xs text-slate-500">Access guidelines, learning materials, and submission portals</p>
+                        </div>
+                    </div>
+
+                    <!-- Workshop List Accordion / Grid -->
+                    <div id="directory-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Content populated dynamically -->
+                    </div>
+
+                    <!-- Selected Workshop Detailed View Container -->
+                    <div id="workshop-detail-view" class="hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+                        <!-- Populated dynamically when viewing workshop -->
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- VIEW 4: WORKSHOP TRACKER (STUDENT VIEW) -->
+                <!-- ========================================== -->
+                <div id="view-tracker" class="hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">MY WORKSHOP TRACKER</h2>
+                            <p class="text-xs text-slate-500">Group 4 - Comprehensive activity and submission progress</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">Group Status: Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Group Breakdown Summary Stats -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="p-4 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs text-slate-400 font-bold uppercase">Learning Materials</div>
+                            <div class="text-xl font-extrabold text-slate-900 mt-1">4 / 4</div>
+                            <div class="text-[10px] text-emerald-600 font-semibold mt-0.5">100% Completed</div>
+                        </div>
+                        <div class="p-4 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs text-slate-400 font-bold uppercase">Activities</div>
+                            <div class="text-xl font-extrabold text-slate-900 mt-1">2 / 3</div>
+                            <div class="text-[10px] text-amber-600 font-semibold mt-0.5">66% Completed</div>
+                        </div>
+                        <div class="p-4 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs text-slate-400 font-bold uppercase">Pending Submissions</div>
+                            <div class="text-xl font-extrabold text-amber-600 mt-1">1 Activity</div>
+                            <div class="text-[10px] text-slate-400 font-semibold mt-0.5">Due Tomorrow</div>
+                        </div>
+                        <div class="p-4 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs text-slate-400 font-bold uppercase">Panda Alert</div>
+                            <div class="text-xl font-extrabold text-slate-900 mt-1">Normal 🐼</div>
+                            <div class="text-[10px] text-slate-400 font-semibold mt-0.5">On Schedule</div>
+                        </div>
+                    </div>
+
+                    <!-- Tracker Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                                    <tr>
+                                        <th class="py-3.5 px-4">Workshop</th>
+                                        <th class="py-3.5 px-4">Activity Name</th>
+                                        <th class="py-3.5 px-4">Status</th>
+                                        <th class="py-3.5 px-4">Deadline</th>
+                                        <th class="py-3.5 px-4 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 font-medium">
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 1</td>
+                                        <td class="py-3 px-4">Activity 1: Research Topic Formulation</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">✓ Completed</span></td>
+                                        <td class="py-3 px-4 text-slate-500">Sept 8, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button class="text-brand-600 hover:underline">View</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 1</td>
+                                        <td class="py-3 px-4">Activity 2: Background & Problem Statement</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">✓ Completed</span></td>
+                                        <td class="py-3 px-4 text-slate-500">Sept 9, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button class="text-brand-600 hover:underline">View</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 1</td>
+                                        <td class="py-3 px-4">Activity 3: Theoretical Framework Draft</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">✓ Completed</span></td>
+                                        <td class="py-3 px-4 text-slate-500">Sept 10, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button class="text-brand-600 hover:underline">View</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 2</td>
+                                        <td class="py-3 px-4">Activity 1: Research Design Selection</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">✓ Completed</span></td>
+                                        <td class="py-3 px-4 text-slate-500">Sept 15, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button class="text-brand-600 hover:underline">View</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 2</td>
+                                        <td class="py-3 px-4">Activity 2: Population & Sampling Plan</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-800">In Progress</span></td>
+                                        <td class="py-3 px-4 text-slate-500">Sept 16, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button class="text-brand-600 hover:underline">Continue</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 2</td>
+                                        <td class="py-3 px-4">Activity 3: Research Instrument Matrix</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700">Not Done</span></td>
+                                        <td class="py-3 px-4 text-slate-500">Sept 17, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button class="text-brand-600 hover:underline">Start</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition bg-amber-50/20">
+                                        <td class="py-3 px-4 font-bold text-slate-900">Workshop 3</td>
+                                        <td class="py-3 px-4">Activity 3: General & Specific Objectives</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800">In Progress (Due Tomorrow)</span></td>
+                                        <td class="py-3 px-4 font-bold text-amber-700">Sept 30, 2026</td>
+                                        <td class="py-3 px-4 text-right"><button onclick="navigateToWorkshop(3)" class="px-3 py-1 bg-brand-600 text-white rounded-lg hover:bg-brand-700">Submit</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition text-slate-400">
+                                        <td class="py-3 px-4 font-bold">Workshop 4</td>
+                                        <td class="py-3 px-4">Activity 1: Statistical Treatment Plan</td>
+                                        <td class="py-3 px-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-500">Not Done (Locked)</span></td>
+                                        <td class="py-3 px-4">Oct 5, 2026</td>
+                                        <td class="py-3 px-4 text-right"><i class="fa-solid fa-lock text-slate-300"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- VIEW 5: PROFESSOR DASHBOARD VIEW -->
+                <!-- ========================================== -->
+                <div id="view-professor" class="hidden space-y-6">
+                    <div class="bg-indigo-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="px-3 py-1 bg-indigo-500/30 text-indigo-200 text-xs font-bold rounded-full border border-indigo-400/20 uppercase tracking-wider">
+                                Faculty Management Portal
+                            </span>
+                            <h2 class="text-2xl font-bold mt-2">PROFESSOR DASHBOARD</h2>
+                            <p class="text-indigo-200 text-xs">Overview across 12 Research Groups for Workshop 3</p>
+                        </div>
+                        <div class="flex items-center gap-3 bg-indigo-800/80 p-3 rounded-2xl border border-indigo-700">
+                            <i class="fa-solid fa-user-shield text-indigo-300 text-2xl"></i>
+                            <div>
+                                <div class="text-xs font-bold">Prof. Maria Santos, RN, MAN</div>
+                                <div class="text-[10px] text-indigo-300">Lead Research Adviser</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Overview Metrics -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="p-5 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs font-bold text-slate-400 uppercase">Completed</div>
+                            <div class="text-2xl font-extrabold text-emerald-600 mt-1">7 Groups</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Ready for Grading</div>
+                        </div>
+                        <div class="p-5 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs font-bold text-slate-400 uppercase">In Progress</div>
+                            <div class="text-2xl font-extrabold text-blue-600 mt-1">3 Groups</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Working on requirements</div>
+                        </div>
+                        <div class="p-5 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs font-bold text-slate-400 uppercase">Not Done</div>
+                            <div class="text-2xl font-extrabold text-slate-600 mt-1">1 Group</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">Not started yet</div>
+                        </div>
+                        <div class="p-5 bg-white rounded-2xl border border-slate-200">
+                            <div class="text-xs font-bold text-slate-400 uppercase">Delayed</div>
+                            <div class="text-2xl font-extrabold text-rose-600 mt-1">1 Group</div>
+                            <div class="text-[10px] text-rose-500 font-semibold mt-0.5">Passed Deadline</div>
+                        </div>
+                    </div>
+
+                    <!-- Group Progress List & Deep-Dive Panel -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                        <!-- Left 2 Cols: Group Progress List -->
+                        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                            <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center justify-between">
+                                <span>GROUP PROGRESS OVERVIEW</span>
+                                <span class="text-xs font-normal text-slate-400">Workshop 3 Submission Progress</span>
+                            </h3>
+
+                            <div class="space-y-4">
+                                <!-- Group 1 -->
+                                <div onclick="inspectGroup('Group 1', 100)" class="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-slate-50 transition cursor-pointer">
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-900">Group 1 - Quantitative Study</span>
+                                        <span class="text-emerald-600">100% Completed</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                                        <div class="bg-emerald-500 h-2 rounded-full w-full"></div>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Submitted Activity 1, 2, & 3</p>
+                                </div>
+
+                                <!-- Group 2 -->
+                                <div onclick="inspectGroup('Group 2', 80)" class="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-slate-50 transition cursor-pointer">
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-900">Group 2 - Clinical Simulation</span>
+                                        <span class="text-blue-600">80% In Progress</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                                        <div class="bg-blue-500 h-2 rounded-full w-4/5"></div>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Materials completed • Activity 3 pending</p>
+                                </div>
+
+                                <!-- Group 3 -->
+                                <div onclick="inspectGroup('Group 3', 60)" class="p-4 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-slate-50 transition cursor-pointer">
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-slate-900">Group 3 - Community Health</span>
+                                        <span class="text-amber-600">60% In Progress</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                                        <div class="bg-amber-500 h-2 rounded-full w-3/5"></div>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500">Activity 2 & 3 pending</p>
+                                </div>
+
+                                <!-- Group 4 -->
+                                <div onclick="inspectGroup('Group 4', 100)" class="p-4 rounded-xl border border-brand-500 bg-brand-50/30 hover:bg-brand-50/50 transition cursor-pointer">
+                                    <div class="flex justify-between text-xs font-bold mb-1">
+                                        <span class="text-brand-900">Group 4 - Nursing Workload Index (Current Active Group)</span>
+                                        <span class="text-emerald-600">100% On Track</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                                        <div class="bg-emerald-500 h-2 rounded-full w-full"></div>
+                                    </div>
+                                    <p class="text-[11px] text-slate-700">Materials completed • Activity 1 & 2 done • Activity 3 ready</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right 1 Col: Detailed Inspector Panel -->
+                        <div id="group-inspector" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                            <div class="border-b border-slate-100 pb-3 mb-4">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">Group Breakdown</span>
+                                <h3 id="inspector-group-title" class="font-bold text-slate-900 text-lg mt-1">GROUP 4</h3>
+                                <p class="text-xs text-slate-500">Workshop 3 Detailed Audit</p>
+                            </div>
+
+                            <div class="space-y-4 text-xs">
+                                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
+                                    <span>Materials Completed:</span>
+                                    <span class="font-bold text-emerald-600"><i class="fa-solid fa-check"></i> 4/4 Completed</span>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div class="font-bold text-slate-700">Activities Breakdown:</div>
+                                    <div class="p-2.5 border border-slate-200 rounded-xl flex items-center justify-between">
+                                        <span>Activity 1: Topic</span>
+                                        <span class="text-emerald-600 font-bold">✓ Submitted</span>
+                                    </div>
+                                    <div class="p-2.5 border border-slate-200 rounded-xl flex items-center justify-between">
+                                        <span>Activity 2: Problem</span>
+                                        <span class="text-emerald-600 font-bold">✓ Submitted</span>
+                                    </div>
+                                    <div class="p-2.5 border border-slate-200 rounded-xl flex items-center justify-between">
+                                        <span>Activity 3: Objectives</span>
+                                        <span class="text-amber-600 font-bold">In Progress</span>
+                                    </div>
+                                </div>
+
+                                <div class="pt-3 border-t border-slate-100">
+                                    <div class="text-slate-500 mb-2">Target Deadline: <span class="font-bold text-slate-800">September 30, 2026</span></div>
+                                    <button onclick="alert('Notification reminder triggered and sent to Group 4 members via official email.');" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition">
+                                        Send Reminder Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- VIEW 6: HELPDESK / Q&A VIEW -->
+                <!-- ========================================== -->
+                <div id="view-helpdesk" class="hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-900">Q&A / HELP DESK</h2>
+                                <p class="text-xs text-slate-500">Ask questions regarding nursing research guidelines and workshops</p>
+                            </div>
+                            <button onclick="alert('Question submitted to faculty advisers!');" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition">
+                                + Ask a Question
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50/50">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 text-[10px] font-bold rounded-full">Sampling Methods</span>
+                                    <span class="text-xs text-slate-400">Posted 2 days ago</span>
+                                </div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">How do we determine sample size for stratified random sampling?</h4>
+                                <p class="text-xs text-slate-600 mb-3">Can we use Yamane's formula or is G*Power required for clinical nursing surveys?</p>
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-700">
+                                    <span class="font-bold text-brand-700"><i class="fa-solid fa-reply"></i> Prof. Santos:</span> You may use Yamane's formula for descriptive surveys, but G*Power is mandatory if conducting inferential statistical tests.
+                                </div>
+                            </div>
+
+                            <div class="p-4 border border-slate-200 rounded-2xl bg-slate-50/50">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">Group Submissions</span>
+                                    <span class="text-xs text-slate-400">Posted 4 days ago</span>
+                                </div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">Does every student need to click submit?</h4>
+                                <p class="text-xs text-slate-600 mb-3">Or can the group leader submit on behalf of all members?</p>
+                                <div class="p-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-700">
+                                    <span class="font-bold text-brand-700"><i class="fa-solid fa-reply"></i> System Admin:</span> All members must finish viewing learning materials, but one group member can submit the final activity file for the entire group!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- GLOBAL MODALS & DIALOGS -->
+
+    <!-- Modal 1: Account Role Verification Error Dialog -->
+    <div id="role-error-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+                <h3 id="role-error-title" class="text-lg font-bold text-slate-900">Unable to Log In</h3>
+                <p id="role-error-msg" class="text-xs text-slate-600 mt-2 leading-relaxed">
+                    This account is registered as a Student. Please select "Student" to continue.
+                </p>
+            </div>
+            <div class="pt-2">
+                <button onclick="closeRoleErrorModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
+                    RETURN TO LOGIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Announcements Reader Modal -->
+    <div id="announcement-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <span class="text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fa-solid fa-bullhorn"></i> Official Announcement
+                </span>
+                <button onclick="closeAnnouncementModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <h3 id="announcement-modal-title" class="text-lg font-bold text-slate-900">Title</h3>
+            <div id="announcement-modal-body" class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                Body text...
+            </div>
+            <div class="pt-2 text-right">
+                <button onclick="closeAnnouncementModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Proactive Email Notification System Simulator -->
+    <div id="notification-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="font-bold text-slate-900 text-base">Proactive Email Notification Triggers</h3>
+                    <p class="text-xs text-slate-500">Simulates automatic email dispatches sent to students</p>
+                </div>
+                <button onclick="closeNotificationModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Email Trigger Simulator Tabs -->
+            <div class="space-y-3">
+                <div class="p-3 bg-brand-50 border border-brand-200 rounded-xl">
+                    <div class="text-xs font-bold text-brand-900 flex items-center gap-2">
+                        <i class="fa-solid fa-envelope"></i> Trigger 1: New Workshop Opened
+                    </div>
+                    <div class="text-xs text-brand-800 mt-1">"RESEARCH SYNC: Workshop 3 is now open. Title: Data Collection. Includes 3 activities."</div>
+                </div>
+
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                    <div class="text-xs font-bold text-amber-900 flex items-center gap-2">
+                        <i class="fa-solid fa-envelope"></i> Trigger 2: 3-Days Before Deadline
+                    </div>
+                    <div class="text-xs text-amber-800 mt-1">"Reminder: Workshop 3 Activity 2 is due in 3 days."</div>
+                </div>
+
+                <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                    <div class="text-xs font-bold text-rose-900 flex items-center gap-2">
+                        <i class="fa-solid fa-envelope"></i> Trigger 3: Deadline Day & Delayed Status
+                    </div>
+                    <div class="text-xs text-rose-800 mt-1">"Your Workshop 3 Activity 2 is due today. / Activity is now delayed."</div>
+                </div>
+            </div>
+
+            <div class="pt-2 text-right">
+                <button onclick="closeNotificationModal()" class="px-4 py-2 bg-slate-900 text-white font-bold rounded-xl text-xs transition">
+                    Done Previewing
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // Data Mocking State
+        const state = {
+            currentUserRole: null, // 'STUDENT' or 'PROFESSOR'
+            selectedLoginRole: null, // 'STUDENT' or 'PROFESSOR'
+            activeTab: 'dashboard',
+            
+            // Workshop dataset as specified
+            workshops: [
+                {
+                    id: 1,
+                    title: "Workshop 1: Research Fundamentals",
+                    status: "COMPLETED",
+                    activitiesCompleted: 3,
+                    totalActivities: 3,
+                    opens: "Completed",
+                    materials: [
+                        { name: "Research Fundamentals PPT", type: "ppt", viewed: true },
+                        { name: "Introduction Video Lecture", type: "video", viewed: true },
+                        { name: "Manuscript Template v1", type: "template", viewed: true }
+                    ],
+                    activities: [
+                        { id: 1, title: "Activity 1: Research Topic", status: "Completed" },
+                        { id: 2, title: "Activity 2: Research Problem", status: "Completed" },
+                        { id: 3, title: "Activity 3: Theoretical Framework", status: "Completed" }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Workshop 2: Research Design",
+                    status: "COMPLETED",
+                    activitiesCompleted: 3,
+                    totalActivities: 3,
+                    opens: "Completed",
+                    materials: [
+                        { name: "Research Design PPT", type: "ppt", viewed: true },
+                        { name: "Sampling Method Template", type: "template", viewed: true }
+                    ],
+                    activities: [
+                        { id: 1, title: "Activity 1: Research Design Selection", status: "Completed" },
+                        { id: 2, title: "Activity 2: Population & Sampling", status: "Completed" },
+                        { id: 3, title: "Activity 3: Instrument Matrix", status: "Completed" }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Workshop 3: Data Collection",
+                    status: "OPEN",
+                    activitiesCompleted: 2,
+                    totalActivities: 3,
+                    opens: "Active Now",
+                    materials: [
+                        { id: "m1", name: "Sampling Methods PPT", type: "ppt", viewed: true },
+                        { id: "m2", name: "Data Gathering Guidelines Video", type: "video", viewed: true },
+                        { id: "m3", name: "Sampling & Tool Template", type: "template", viewed: true }
+                    ],
+                    activities: [
+                        { id: 1, title: "Activity 1: Sampling Methods & Strategy", status: "Completed" },
+                        { id: 2, title: "Activity 2: Data Collection Procedure", status: "Completed" },
+                        { id: 3, title: "Activity 3: Research Objectives", status: "In Progress", due: "Tomorrow" }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Workshop 4: Data Analysis",
+                    status: "LOCKED",
+                    activitiesCompleted: 0,
+                    totalActivities: 3,
+                    opens: "October 5",
+                    materials: [
+                        { name: "Statistical Treatment PPT", type: "ppt", viewed: false },
+                        { name: "SPSS Analysis Guide", type: "video", viewed: false }
+                    ],
+                    activities: [
+                        { id: 1, title: "Activity 1: Statistical Treatment Plan", status: "Not Done" },
+                        { id: 2, title: "Activity 2: Data Coding Sheet", status: "Not Done" },
+                        { id: 3, title: "Activity 3: Sample Results Table", status: "Not Done" }
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "Workshop 5: Results & Discussion",
+                    status: "LOCKED",
+                    activitiesCompleted: 0,
+                    totalActivities: 3,
+                    opens: "October 18",
+                    materials: [],
+                    activities: []
+                },
+                {
+                    id: 6,
+                    title: "Workshop 6: Final Defense Prep",
+                    status: "LOCKED",
+                    activitiesCompleted: 0,
+                    totalActivities: 2,
+                    opens: "November 2",
+                    materials: [],
+                    activities: []
+                }
+            ],
+
+            // Search Index Database
+            searchDatabase: [
+                { title: "Sampling Methods PPT", type: "PPT", category: "Workshop 3 Materials", tab: "directory", workshopId: 3 },
+                { title: "Sampling Template & Checklist", type: "Template", category: "Workshop 3 Materials", tab: "directory", workshopId: 3 },
+                { title: "Data Gathering Guidelines Video", type: "Video", category: "Workshop 3 Materials", tab: "directory", workshopId: 3 },
+                { title: "Sampling Methods & Stratification Q&A", type: "Help Desk", category: "Help Desk Q&A", tab: "helpdesk" },
+                { title: "Activity 3: Research Objectives", type: "Activity", category: "Workshop 3 Requirements", tab: "tracker" },
+                { title: "Workshop 4 Data Analysis Announcement", type: "Announcement", category: "Announcements", tab: "dashboard" }
+            ]
+        };
+
+        // --- AUTH & ROLE SELECTION LOGIC ---
+
+        function selectRole(role) {
+            state.selectedLoginRole = role;
+            document.getElementById('role-selection-step').classList.add('hidden');
+            document.getElementById('login-form-step').classList.remove('hidden');
+            
+            const badge = document.getElementById('selected-role-badge');
+            badge.textContent = `${role} LOGIN`;
+            badge.className = role === 'PROFESSOR' 
+                ? "px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold rounded-full uppercase tracking-wider"
+                : "px-3 py-1 bg-brand-100 text-brand-800 text-xs font-bold rounded-full uppercase tracking-wider";
+        }
+
+        function resetRoleSelection() {
+            state.selectedLoginRole = null;
+            document.getElementById('login-form-step').classList.add('hidden');
+            document.getElementById('role-selection-step').classList.remove('hidden');
+            document.getElementById('domain-error').classList.add('hidden');
+        }
+
+        function quickLogin(type) {
+            if (type === 'student') {
+                selectRole('STUDENT');
+                document.getElementById('email-input').value = 'studentname@tua.edu.ph';
+            } else {
+                selectRole('PROFESSOR');
+                document.getElementById('email-input').value = 'professor@tua.edu.ph';
+            }
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('email-input').value.trim().toLowerCase();
+            const domainError = document.getElementById('domain-error');
+
+            // Requirement 1: Validate Domain Restriction (@tua.edu.ph)
+            if (!email.endsWith('@tua.edu.ph')) {
+                domainError.classList.remove('hidden');
+                return;
+            } else {
+                domainError.classList.add('hidden');
+            }
+
+            // Requirement 2: Account Role Verification Check
+            const selectedRole = state.selectedLoginRole;
+            const isStudentEmail = email.includes('student') || email.startsWith('s') || !email.includes('prof');
+            const isProfEmail = email.includes('prof') || email.includes('professor');
+
+            // Role Mismatch Verifications
+            if (selectedRole === 'PROFESSOR' && isStudentEmail) {
+                showRoleErrorModal(
+                    "Unable to Log In",
+                    "This account is registered as a Student. Please select 'Student' to continue."
+                );
+                return;
+            }
+
+            if (selectedRole === 'STUDENT' && isProfEmail) {
+                showRoleErrorModal(
+                    "Incorrect Account Type",
+                    "This account is registered as a Professor. Please select 'Professor' to continue."
+                );
+                return;
+            }
+
+            // Successful Login Procedure
+            state.currentUserRole = selectedRole;
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+
+            // Update Navbar Details
+            if (selectedRole === 'PROFESSOR') {
+                document.getElementById('user-subhead').textContent = "Faculty Review Portal";
+                document.getElementById('user-avatar').textContent = "PS";
+                document.getElementById('user-display-name').textContent = "Prof. Santos";
+                document.getElementById('user-display-role').textContent = "Lead Adviser";
+                switchTab('professor-view');
+            } else {
+                document.getElementById('user-subhead').textContent = "Welcome, Group 4!";
+                document.getElementById('user-avatar').textContent = "G4";
+                document.getElementById('user-display-name').textContent = "Group 4";
+                document.getElementById('user-display-role').textContent = "BSN Student";
+                switchTab('dashboard');
+            }
+
+            renderWorkshopDirectory();
+            updatePandaMascot();
+        }
+
+        function showRoleErrorModal(title, msg) {
+            document.getElementById('role-error-title').textContent = title;
+            document.getElementById('role-error-msg').textContent = msg;
+            document.getElementById('role-error-modal').classList.remove('hidden');
+        }
+
+        function closeRoleErrorModal() {
+            document.getElementById('role-error-modal').classList.add('hidden');
+        }
+
+        function logout() {
+            state.currentUserRole = null;
+            resetRoleSelection();
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+        }
+
+        // --- NAVIGATION LOGIC ---
+
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            
+            // Hide all tab views
+            ['dashboard', 'directory', 'tracker', 'helpdesk', 'professor-view'].forEach(id => {
+                const el = document.getElementById(`view-${id === 'professor-view' ? 'professor' : id}`);
+                if (el) el.classList.add('hidden');
+                
+                const btn = document.getElementById(`tab-${id}`);
+                if (btn) {
+                    btn.className = "nav-tab px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100";
+                }
+            });
+
+            // Show active view
+            const activeEl = document.getElementById(`view-${tabId === 'professor-view' ? 'professor' : tabId}`);
+            if (activeEl) activeEl.classList.remove('hidden');
+
+            // Highlight tab button
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                if (tabId === 'professor-view') {
+                    activeBtn.className = "nav-tab px-4 py-2 rounded-lg text-sm font-bold transition flex items-center gap-2 text-indigo-700 bg-indigo-100 border border-indigo-300 ml-auto";
+                } else {
+                    activeBtn.className = "nav-tab px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-brand-600 bg-brand-50";
+                }
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- PANDA PROGRESS SYSTEM ---
+
+        function updatePandaMascot() {
+            const pandaAvatar = document.getElementById('panda-avatar');
+            const pandaTitle = document.getElementById('panda-status-title');
+            const pandaDesc = document.getElementById('panda-status-desc');
+            const pandaBadge = document.getElementById('panda-badge');
+
+            // Evaluate state conditions (Default: Awake/Normal with pending activities)
+            const w3 = state.workshops.find(w => w.id === 3);
+            const isCompletedAll = w3.activitiesCompleted === w3.totalActivities;
+
+            if (isCompletedAll) {
+                pandaAvatar.innerHTML = `🐼 <span class="text-xl absolute bottom-0 right-0">💤</span>`;
+                pandaTitle.textContent = "Sleeping";
+                pandaDesc.textContent = `"Nothing left to do."`;
+                pandaBadge.className = "absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-blue-500 border-2 border-slate-900";
+            } else {
+                // Pending, deadline is tomorrow (near)
+                pandaAvatar.innerHTML = `🐼 <span class="text-[10px] absolute top-1 right-1 font-bold">👀</span>`;
+                pandaTitle.textContent = "Awake with Eye Bags";
+                pandaDesc.textContent = `"Better finish this soon!"`;
+                pandaBadge.className = "absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-500 border-2 border-slate-900 animate-pulse";
+            }
+        }
+
+        // --- GLOBAL SEARCH ENGINE ---
+
+        function handleSearch(query) {
+            const modal = document.getElementById('search-results-modal');
+            const list = document.getElementById('search-results-list');
+            const clearBtn = document.getElementById('search-clear-btn');
+            const countLabel = document.getElementById('result-count');
+
+            if (!query.trim()) {
+                modal.classList.add('hidden');
+                clearBtn.classList.add('hidden');
+                return;
+            }
+
+            clearBtn.classList.remove('hidden');
+            const matches = state.searchDatabase.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) || 
+                item.category.toLowerCase().includes(query.toLowerCase()) ||
+                item.type.toLowerCase().includes(query.toLowerCase())
+            );
+
+            countLabel.textContent = `${matches.length} matches`;
+            list.innerHTML = '';
+
+            if (matches.length === 0) {
+                list.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">No matching resources found.</p>`;
+            } else {
+                matches.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = "p-2.5 hover:bg-slate-50 rounded-xl transition cursor-pointer border border-slate-100 flex items-center justify-between";
+                    div.onclick = () => {
+                        modal.classList.add('hidden');
+                        if (item.tab === 'directory' && item.workshopId) {
+                            switchTab('directory');
+                            navigateToWorkshop(item.workshopId);
+                        } else {
+                            switchTab(item.tab);
+                        }
+                    };
+                    div.innerHTML = `
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">${item.title}</div>
+                            <div class="text-[10px] text-slate-400">${item.category}</div>
+                        </div>
+                        <span class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-md">${item.type}</span>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function clearSearch() {
+            document.getElementById('global-search').value = '';
+            document.getElementById('search-results-modal').classList.add('hidden');
+            document.getElementById('search-clear-btn').classList.add('hidden');
+        }
+
+        // --- WORKSHOP DIRECTORY & DETAIL LOGIC ---
+
+        function renderWorkshopDirectory() {
+            const container = document.getElementById('directory-list');
+            container.innerHTML = '';
+
+            state.workshops.forEach(w => {
+                const card = document.createElement('div');
+                let statusBadge = '';
+                let actionBtn = '';
+
+                if (w.status === 'COMPLETED') {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">✓ COMPLETED</span>`;
+                    actionBtn = `<button onclick="navigateToWorkshop(${w.id})" class="mt-3 py-2 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl w-full transition">[ VIEW WORKSHOP ]</button>`;
+                } else if (w.status === 'OPEN') {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-emerald-500 text-white text-xs font-bold rounded-full">● OPEN</span>`;
+                    actionBtn = `<button onclick="navigateToWorkshop(${w.id})" class="mt-3 py-2 px-4 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl w-full transition shadow-md">[ CONTINUE ]</button>`;
+                } else {
+                    statusBadge = `<span class="px-2.5 py-0.5 bg-slate-100 text-slate-500 text-xs font-bold rounded-full"><i class="fa-solid fa-lock text-[10px]"></i> LOCKED</span>`;
+                    actionBtn = `<button disabled class="mt-3 py-2 px-4 bg-slate-100 text-slate-400 text-xs font-bold rounded-xl w-full cursor-not-allowed">Opens: ${w.opens}</button>`;
+                }
+
+                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400">WORKSHOP ${w.id}</span>
+                            ${statusBadge}
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">${w.title.split(': ')[1]}</h3>
+                        <p class="text-xs text-slate-500">${w.activitiesCompleted}/${w.totalActivities} Activities Completed</p>
+                    </div>
+                    ${actionBtn}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function navigateToWorkshop(workshopId) {
+            switchTab('directory');
+            const detailView = document.getElementById('workshop-detail-view');
+            const workshop = state.workshops.find(w => w.id === workshopId);
+
+            if (!workshop) return;
+
+            detailView.classList.remove('hidden');
+            detailView.innerHTML = `
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Example Workshop Detail</span>
+                        <h2 class="text-xl font-extrabold text-slate-900">${workshop.title}</h2>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">STATUS: ${workshop.status}</span>
+                            <span class="text-xs text-slate-400">All 2-3 activities visible simultaneously</span>
+                        </div>
+                    </div>
+                    <button onclick="document.getElementById('workshop-detail-view').classList.add('hidden')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl">
+                        Close
+                    </button>
+                </div>
+
+                <!-- Section 1: Guidelines -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-file-contract text-brand-600"></i> 1. GUIDELINES & INSTRUCTIONS
+                    </h4>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                        <p class="font-semibold text-slate-800 mb-1">Standard Operating Guidelines:</p>
+                        <p>1. Review all learning PPTs and videos prior to attempting submission.</p>
+                        <p>2. Complete activities synchronously in group collaboration.</p>
+                        <button onclick="alert('Viewing official workshop guidelines PDF document.')" class="mt-3 px-3 py-1.5 bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-bold rounded-lg transition text-[11px]">
+                            [ VIEW INSTRUCTIONS ]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 2: Learning Materials -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-brand-600"></i> 2. LEARNING MATERIALS
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        ${workshop.materials.map(m => `
+                            <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-slate-800">${m.name}</div>
+                                    <div class="text-[10px] text-slate-400 uppercase">${m.type}</div>
+                                </div>
+                                <i class="fa-solid fa-circle-check text-emerald-500 text-base"></i>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Section 3: Simultaneous Visible Activities -->
+                <div class="space-y-3 pt-2">
+                    <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-brand-600"></i> 3. ACTIVITIES (Visible Simultaneously)
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        ${workshop.activities.map(act => `
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between">
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">${act.title}</div>
+                                    <div class="mt-2 text-[10px]">
+                                        <span class="px-2 py-0.5 rounded font-bold ${act.status === 'Completed' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                            ${act.status}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Opening submission view for ${act.title}')" class="mt-4 w-full py-1.5 bg-white hover:bg-slate-100 border border-slate-300 font-bold text-[11px] text-slate-700 rounded-lg">
+                                    [ View Activity ]
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Section 4: Submission Lock Rule Component -->
+                <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-unlock text-emerald-600"></i> SUBMISSION READY
+                        </div>
+                        <p class="text-[11px] text-emerald-700 mt-0.5">All group members have completed learning materials. Submission unlocked.</p>
+                    </div>
+                    <button onclick="triggerGroupSubmission()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition">
+                        [ Submit for Group ]
+                    </button>
+                </div>
+            `;
+
+            detailView.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function triggerGroupSubmission() {
+            alert("Success! Requirement submitted on behalf of Group 4!");
+            const w3 = state.workshops.find(w => w.id === 3);
+            w3.activitiesCompleted = 3;
+            w3.activities[2].status = "Completed";
+            updatePandaMascot();
+            renderWorkshopDirectory();
+            navigateToWorkshop(3);
+        }
+
+        // --- PROFESSOR INSPECTOR LOGIC ---
+        function inspectGroup(groupName, pct) {
+            document.getElementById('inspector-group-title').textContent = groupName.toUpperCase();
+        }
+
+        // --- ANNOUNCEMENT & NOTIFICATION MODALS ---
+        function openAnnouncementModal(title, body) {
+            document.getElementById('announcement-modal-title').textContent = title;
+            document.getElementById('announcement-modal-body').textContent = body;
+            document.getElementById('announcement-modal').classList.remove('hidden');
+        }
+
+        function closeAnnouncementModal() {
+            document.getElementById('announcement-modal').classList.add('hidden');
+        }
+
+        function openNotificationModal() {
+            document.getElementById('notification-modal').classList.remove('hidden');
+        }
+
+        function closeNotificationModal() {
+            document.getElementById('notification-modal').classList.add('hidden');
+        }
+
+        function addToGoogleCalendar() {
+            alert("Google Calendar Link Generated: September 2026 Nursing Research Workshop deadlines added to your schedule!");
+        }
+
+        // Window Load Event Listener
+        window.onload = function() {
+            console.log("RESEARCH SYNC Initialized");
+        };
+    </script>
+</body>
+</html>
